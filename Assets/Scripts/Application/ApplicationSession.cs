@@ -1,18 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace TestTask
 {
-    public class ApplicationSession 
+    public class ApplicationSession
     {
+        private readonly Cube _cube;
+
+        private readonly Field _field;
+
         #region Ctor
 
-        public ApplicationSession()
+        public ApplicationSession(Cube cube, Field field)
         {
-                
+            _cube = cube;
+            _field = field;
         }
         
         #endregion
@@ -21,27 +25,13 @@ namespace TestTask
 
         public async UniTask RunSession()
         {
-            CutCloth();
-            await MoveCube();
+            _field.RebuildField();
+            var worldSpacePath = _field.WorldSpacePath;
+            await _cube.RunAlongPath(worldSpacePath);
         }
-        
+
         #endregion
-
-        private void CutCloth()
-        {
-            Debug.Log("Mesh cutting");
-        }
-
-        private async UniTask MoveCube()
-        {
-
-            await Task.Delay(1);
-
-            Debug.Log("Cube movement started");
-            await UniTask.Delay(3000);
-            Debug.Log("Cube movement ended");
-        }
-        
+ 
     }
 }
 

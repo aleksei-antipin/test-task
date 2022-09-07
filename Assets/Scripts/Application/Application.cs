@@ -1,16 +1,20 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 namespace TestTask
 {
     public class Application : MonoBehaviour
     {
+        [SerializeField] private Cube _cube;
+
+        [SerializeField] private Field _field;
+        
         private MeshCutter _meshCutter;
 
-        private ApplicationSession _currentSession;
+        private ApplicationSession _session;
+
+        private bool _isApplicationQuit = false;
         
         #region MonoBehaviour
         
@@ -21,18 +25,24 @@ namespace TestTask
         }
 
         #endregion
-
+        
         private void ResolveDependencies()
         {
-            _meshCutter = new MeshCutter();
+            _session = new ApplicationSession(_cube, _field);
         }
 
-        private async UniTask StartSession()
+        private async void StartSession()
         {
-            _currentSession = new ApplicationSession();
-            await _currentSession.RunSession();
-            StartSession();
+            while (!_isApplicationQuit)
+            {
+                await _session.RunSession();
+                await UniTask.Yield();
+            }
+        }
+
+        private void OnApplicationQuit()
+        {
+            _isApplicationQuit = true;
         }
     }
 }
-
