@@ -10,7 +10,7 @@ namespace TestTask
         private readonly Cube _cube;
 
         private readonly Field _field;
-
+        
         #region Ctor
 
         public ApplicationSession(Cube cube, Field field)

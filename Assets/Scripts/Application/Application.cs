@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using DigitalRubyShared;
 
 namespace TestTask
 {
@@ -10,7 +11,7 @@ namespace TestTask
 
         [SerializeField] private Field _field;
         
-        private MeshCutter _meshCutter;
+        private InputHandler _inputHandler;
 
         private ApplicationSession _session;
 
@@ -29,6 +30,8 @@ namespace TestTask
         private void ResolveDependencies()
         {
             _session = new ApplicationSession(_cube, _field);
+            _inputHandler = new InputHandler();
+            _cube.Initialize(_inputHandler);
         }
 
         private async void StartSession()
